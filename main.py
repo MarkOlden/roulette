@@ -21,18 +21,26 @@ def bet():
             color = 'black'
             bet_button.configure(text='BLACK')
             bet_window.destroy()
-    bet_window.geometry('310x110+500+430')
+        elif RadioValue.get() == 2:
+            color = 'green'
+            bet_button.configure(text='GREEN')
+            bet_window.destroy()
+    bet_window.geometry('190x60+500+430')
+    bet_window.resizable(width=False, height=False)
     bet_window.title('New bet')
-    main_label = Label(bet_window, text="Place your bets")
     RadioValue0 = IntVar(bet_window)
     RadioValue0.set(0)
-    R_button0 = Radiobutton(bet_window, text='RED', variable=RadioValue0, value=0, padx=20)
-    R_button1 = Radiobutton(bet_window, text='BLACK', variable=RadioValue0, value=1, padx=20)
-    b = Button(bet_window, text='Bet', command=lambda:get_color(RadioValue0))
-    main_label.pack()
-    R_button0.pack(side=LEFT)
-    R_button1.pack(side=RIGHT)
+    R_button0 = Radiobutton(bet_window, indicatoron = 0, text='RED', variable=RadioValue0, width=6, height=3, value=0, bg='light blue', font = ('bold'))
+    R_button1 = Radiobutton(bet_window, indicatoron = 0, text='BLACK', variable=RadioValue0, width=6, height=3, value=1, bg='light blue', font = ('bold'))
+    R_button2 = Radiobutton(bet_window, indicatoron = 0, text='GREEN', variable=RadioValue0, width=6, height=3, value=2, bg='light blue', font = ('bold'))
+    R_button0.deselect()
+    R_button1.deselect()
+    R_button2.deselect()
+    b = Button(bet_window, text='BET',width=20, command=lambda:get_color(RadioValue0), font = ('bold'), bg='black', fg='white')
     b.pack(side=BOTTOM)
+    R_button0.pack(side=LEFT)
+    R_button1.pack(side=LEFT)
+    R_button2.pack(side=LEFT)
     bet_window.mainloop()
 
 
@@ -41,17 +49,18 @@ def spin():
     global color
     k += 1
     spin_button["state"] = "disabled"
+    bet_button.configure(text="BETS DONE")
     exit_button["state"] = "disabled"
     stats_button["state"] = "disabled"
     reset_button["state"] = "disabled"
     bet_button["state"] = "disabled"
     spin_button.configure(bg='white', fg='black')
-    pause = 0.01
+    pause = 0.1
     for i in range(random.randint(10, 30)):
         sector = random.randint(0, 36)
         sector_label.configure(text=sector, bg=sectors[sector], fg='white')
         time.sleep(pause)
-        pause += 0.02
+        pause += 0.001 * i
         window.update()
     spin_button["state"] = "normal"
     exit_button["state"] = "normal"
@@ -59,7 +68,7 @@ def spin():
     reset_button["state"] = "normal"
     bet_button["state"] = "normal"
     bet_button.configure(text="BET")
-    spin_button.configure(bg='green', fg='white')
+    spin_button.configure(bg='light blue', fg='black')
     stats[sectors[sector]] += 1
     win_check(color, sector)
     del color
@@ -76,7 +85,7 @@ def win_check(color, sector):
 
 def show_stats():
     sector_label.configure(text='R: ' + str(stats['red']) + '\nB: ' + str(stats['black']) + '\nG: ' + str(stats['green']))
-    sector_label.configure(bg='white', fg='black')
+    sector_label.configure(bg = 'light blue', fg='black')
 
 
 def reset_stats():
@@ -91,9 +100,10 @@ def reset_stats():
 
 def popupScreen():
     popupRoot = Tk()
+    popupRoot.configure(background='light blue')
     # popupRoot.after(5000, exit)
-    popupLabel = Label(popupRoot, text='Sure want to exit?', font = ("Verdana", 12))
-    popupButton = Button(popupRoot, padx=100, text='Exit', command=exit, bg='black', fg='white')
+    popupLabel = Label(popupRoot, text='Sure want to exit?', font = ("Verdana", 12), bg='light blue')
+    popupButton = Button(popupRoot, padx=100, text='exit', command=exit, bg='black', fg='white')
     popupRoot.title('Bye')
     popupLabel.pack()
     popupButton.pack()
@@ -105,7 +115,7 @@ def secret(event):
     global sec
     sec += 1
     if sec == 15:
-        spin_button.configure(text='666')
+        spin_button.configure(text='🤑')
 
 
 sectors = {
@@ -163,11 +173,11 @@ window.geometry('+500+200')
 fontStyle = tkFont.Font(family="Lucida Grande", size=32)
 
 sector_label = Label(window, text='Good luck!', font=fontStyle, width='12', height='4')
-bet_button = Button(window, text='BET', command=bet, width='12', height='1', bg='yellow', fg='black', font=fontStyle)
-spin_button = Button(window, text='SPIN', command=spin, width='12', height='1', bg = 'green', fg='white', font=fontStyle)
-stats_button = Button(window, text='show stats', command=show_stats, width='14', height='1')
-reset_button = Button(window, text='reset stats', command=reset_stats, width='13', height='1')
-exit_button = Button(window, text='exit', command=popupScreen, width='13', height='1')
+bet_button = Button(window, text='BET', command=bet, width='12', height='1', bg='light blue', fg='black', font=fontStyle)
+spin_button = Button(window, text='SPIN', command=spin, width='12', height='1', bg = 'light blue', fg='black', font=fontStyle)
+stats_button = Button(window, text='show stats', command=show_stats, width='14', height='1', bg='black', fg='white')
+reset_button = Button(window, text='reset stats', command=reset_stats, width='13', height='1', bg='black', fg='white')
+exit_button = Button(window, text='exit', command=popupScreen, width='13', height='1', bg='black', fg='white')
 sector_label.pack()
 bet_button.pack()
 spin_button.pack()
